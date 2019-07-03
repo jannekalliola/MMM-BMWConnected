@@ -1,0 +1,20 @@
+{
+  "name": "MMM-BMWConnected",
+  "version": "1.0.0",
+  "description": "Magic Mirror Module to display data from BMW Connected drive for your car.",
+    "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hdurdle/MMM-BMWConnected.git"
+  },
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "author": "Howard Durdle",
+  "license": "MIT",
+  "dependencies": {
+    "fs": "0.0.1-security",
+    "moment": "^2.24.0",
+    "qs": "^6.7.0"
+  }
+}
