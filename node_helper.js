@@ -99,10 +99,6 @@ module.exports = NodeHelper.create({
   },
 
   parseCarInfo: function (payload) {
-    console.log("parseCarInfo");
-    console.log(payload);
-    console.log("parseCarInfo-this");
-    console.log(this.bmwInfo);
     this.sendSocketNotification("MMM-BMWCONNECTED-RESPONSE" + payload.instanceId, this.bmwInfo);
   },
 
