@@ -74,7 +74,7 @@ Module.register('MMM-BMWConnected', {
 
     var locked = document.createElement("span");
     locked.classList.add("locked");
-    if (info.doorLock == "SECURED") {
+    if (info.doorLock === "SECURED" || info.doorLock === "LOCKED") {
       locked.appendChild(this.faIconFactory("fa-lock"));
     } else {
       locked.appendChild(this.faIconFactory("fa-lock-open"));
