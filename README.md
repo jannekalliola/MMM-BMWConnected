@@ -29,9 +29,7 @@ Enter these details in the config.js for your MagicMirror installation:
             position: "top_right",
             config: {
                 email: "email@example.com",
-                password: "myComplexPassword",
-                apiBase: "www.bmw-connecteddrive.co.uk",
-                refresh: 5
+                password: "myComplexPassword"
             }
         },
 
@@ -60,7 +58,11 @@ The module has a few configuration options:
     </tr>
     <tr>
       <td><code>refresh</code></td>
-      <td>How often to refresh the data in minutes. <br /><br /><strong>Default: </strong><code>5</code> </td>
+      <td>How often to refresh the data in minutes. <br /><br /><strong>Default: </strong><code>15</code> </td>
+    </tr>
+        <tr>
+      <td><code>vehicleAngle</code></td>
+      <td>The angle of rotation for the car image. <br /><br /><strong>Default: </strong><code>300</code><br/>Between 0 and 350 in increments of 10.</td>
     </tr>
   </tbody>
 </table>

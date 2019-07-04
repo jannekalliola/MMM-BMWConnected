@@ -62,7 +62,7 @@ module.exports = NodeHelper.create({
                         try {
                           var json = JSON.parse(data);
                           var angleUrls = json.angleUrls;
-                          var picked = angleUrls.find(o => o.angle === 300);
+                          var picked = angleUrls.find(o => o.angle === self.config.vehicleAngle);
                         } catch (err) {
                           console.error("Failed to parse data " + data + ", error " + err);
                         }

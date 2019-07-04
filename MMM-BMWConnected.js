@@ -1,7 +1,9 @@
 Module.register('MMM-BMWConnected', {
 
   defaults: {
-    apiBase: "https://www.bmw-connecteddrive.co.uk"
+    apiBase: "https://www.bmw-connecteddrive.co.uk",
+    refresh: 15,
+    vehicleAngle: 300
   },
 
   getStyles: function () {
