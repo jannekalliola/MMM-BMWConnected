@@ -48,7 +48,7 @@ module.exports = NodeHelper.create({
                     self.bmwInfo = {
                       updateTime: moment.unix(attributes.updateTime_converted_timestamp / 1000).format(),
                       doorLock: attributes.door_lock_state,
-                      electricRange: Number(attributes.beMaxRangeElectricMile).toFixed(),
+                      electricRange: Number(attributes.beRemainingRangeElectricMile).toFixed(),
                       fuelRange: Number(attributes.beRemainingRangeFuelMile).toFixed(),
                       mileage: Number(attributes.mileage).toFixed(),
                       connectorStatus: attributes.connectorStatus,
