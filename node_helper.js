@@ -54,8 +54,15 @@ module.exports = NodeHelper.create({
                       connectorStatus: attributes.connectorStatus,
                       vin: vin,
                       chargingLevelHv: Number(attributes.chargingLevelHv).toFixed(),
-                      imageUrl: null
+                      imageUrl: null,
+                      unitOfLength: attributes.unitOfLength
                     }
+
+                    if (self.config.distance === "km") {
+                      self.bmwInfo.electricRange = Number(attributes.beRemainingRangeElectricKm).toFixed();
+                      self.bmwInfo.fuelRange = Number(attributes.beRemainingRangeFuelKm).toFixed();
+                    }
+
 
                     var getImagesUri = '/api/vehicle/image/v1/' + vin + "?startAngle=0&stepAngle=10&width=640"
                     bmwrequest.call(self.config.apiBase, getImagesUri, '', token, tokenType, function (data) {

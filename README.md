@@ -64,12 +64,24 @@ The module has a few configuration options:
       <td><code>vehicleAngle</code></td>
       <td>The angle of rotation for the car image. <br /><br /><strong>Default: </strong><code>300</code><br/>Between 0 and 350 in increments of 10.</td>
     </tr>
+            <tr>
+      <td><code>distance</code></td>
+      <td>The unit of distance used for mileage and range. <br /><br /><strong>Default: </strong><code>miles</code><br/>Can be: miles or km.</td>
+    </tr>
   </tbody>
 </table>
 
 ## Notes
 
 If possible the module will pull an image of your car from BMW's API. I only have one BMW, so can't test the placement/graphics of other vehicles. I'd love to see what it looks like if you try it.  Tweet images to me at https://twitter.com/hdurdle 
+
+## Help
+
+If you have a moment, please set <code>debug</code> to <code>true</code> in the config and see what text appears in <code>[ ]</code> after the last updated time.  I'm trying to see what the BMW API returns for countries that use KM instead of miles.  I might be able to avoid making it a config option and pull it direct from the API.  Tweet images and comments to me at https://twitter.com/hdurdle 
+
+![Debug Screenshot](debug.png "Debug Screenshot")
+
+Also, if you can offer translations for the few bits of direct text ("last updated") for your language, let me know (along with where the placeholder should go in your language!).
 
 ## Thanks
 

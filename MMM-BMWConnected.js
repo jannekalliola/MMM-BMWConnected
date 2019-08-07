@@ -3,7 +3,9 @@ Module.register('MMM-BMWConnected', {
   defaults: {
     apiBase: "www.bmw-connecteddrive.co.uk",
     refresh: 15,
-    vehicleAngle: 300
+    vehicleAngle: 300,
+    distance: "miles",
+    debug: false
   },
 
   getStyles: function () {
@@ -55,6 +57,12 @@ Module.register('MMM-BMWConnected', {
   },
 
   getDom: function () {
+
+    var distanceSuffix = "mi";
+    if (this.config.distance === "km") {
+      distanceSuffix = "km";
+    }
+
     var wrapper = document.createElement("div");
 
     if (this.config.email === "" || this.config.password === "") {
@@ -67,7 +75,6 @@ Module.register('MMM-BMWConnected', {
       wrapper.className = "dimmed light small";
       return wrapper;
     }
-
 
     var info = this.bmwInfo;
 
@@ -86,7 +93,7 @@ Module.register('MMM-BMWConnected', {
     var mileage = document.createElement("span");
     mileage.classList.add("mileage");
     mileage.appendChild(this.faIconFactory("fa-road"));
-    mileage.appendChild(document.createTextNode(info.mileage + " mi"));
+    mileage.appendChild(document.createTextNode(info.mileage + " " + distanceSuffix));
     carContainer.appendChild(mileage);
 
     wrapper.appendChild(carContainer);
@@ -138,13 +145,13 @@ Module.register('MMM-BMWConnected', {
     var elecRange = document.createElement("span");
     elecRange.classList.add("elecRange");
     elecRange.appendChild(this.faIconFactory("fa-charging-station"));
-    elecRange.appendChild(document.createTextNode(info.electricRange + " mi"));
+    elecRange.appendChild(document.createTextNode(info.electricRange + " " + distanceSuffix));
     carContainer.appendChild(elecRange);
 
     var fuelRange = document.createElement("span");
     fuelRange.classList.add("fuelRange");
     fuelRange.appendChild(this.faIconFactory("fa-gas-pump"));
-    fuelRange.appendChild(document.createTextNode(info.fuelRange + " mi"));
+    fuelRange.appendChild(document.createTextNode(info.fuelRange + " " + distanceSuffix));
     carContainer.appendChild(fuelRange);
     wrapper.appendChild(carContainer);
 
@@ -155,7 +162,11 @@ Module.register('MMM-BMWConnected', {
     var updated = document.createElement("span");
     updated.classList.add("updated");
     updated.appendChild(this.faIconFactory("fa-info"));
-    updated.appendChild(document.createTextNode("last updated " + moment(info.updateTime).fromNow()));
+    var lastUpdateText = "last updated " + moment(info.updateTime).fromNow();
+    if (this.config.debug) {
+      lastUpdateText += " [" + info.unitOfLength + "]";
+    }
+    updated.appendChild(document.createTextNode(lastUpdateText));
     carContainer.appendChild(updated);
     wrapper.appendChild(carContainer);
 
