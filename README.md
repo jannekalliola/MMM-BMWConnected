@@ -75,6 +75,10 @@ The module has a few configuration options:
 
 If possible the module will pull an image of your car from BMW's API. I only have one BMW, so can't test the placement/graphics of other vehicles. I'd love to see what it looks like if you try it.  Tweet images to me at https://twitter.com/hdurdle 
 
+## No Data?
+
+So far this is confirmed working in Europe and the USA.  If you're somewhere else, please visit my [Powershell BMW repository](https://github.com/hdurdle/bmw-powershell) and follow the instructions there to run `Get-BMWInfo.ps1`.  Send me the output and I'll be able to update the module to work in your country.
+
 ## Help
 
 If you have a moment, please set <code>debug</code> to <code>true</code> in the config and see what text appears in <code>[ ]</code> after the last updated time.  I'm trying to see what the BMW API returns for countries that use KM instead of miles.  I might be able to avoid making it a config option and pull it direct from the API.  Tweet images and comments to me at https://twitter.com/hdurdle 
