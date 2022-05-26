@@ -31,7 +31,6 @@ module.exports = NodeHelper.create({
 
           bmwrequest.call(self.config.apiBase, '/api/me/vehicles/v2', '', token, tokenType,
             function (data) {
-			  console.log("get info succes"+data)
               try {
                 var json = JSON.parse(data);
                 vin = json[0].vin;
@@ -43,8 +42,6 @@ module.exports = NodeHelper.create({
 
               bmwrequest.call("cocoapi.bmwgroup.com", getInfoUri, '', token, tokenType,
                 function (data) {
-					console.log("get info2succes"+data)
-
 					try {
                     var json = JSON.parse(data);
                     var attributes = json[0].status; // LIST operation returns all cars of the account, here we take the first one
