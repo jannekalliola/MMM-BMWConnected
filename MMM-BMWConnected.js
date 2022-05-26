@@ -64,6 +64,7 @@ Module.register("MMM-BMWConnected", {
     }
 
     var wrapper = document.createElement("div");
+	  wrapper.classList.add("bmw-wrapper");
 
     if (this.config.email === "" || this.config.password === "") {
       wrapper.innerHTML = "Missing configuration.";

@@ -61,7 +61,7 @@ module.exports = NodeHelper.create({
                     }
 
 
-                    var getImagesUri = '/api/vehicle/image/v1/' + vin + "?startAngle=0&stepAngle=10&width=640"
+                    var getImagesUri = '/api/vehicle/image/v1/' + vin + "?startAngle=0&stepAngle=10&width=320"
                     bmwrequest.call(self.config.apiBase, getImagesUri, '', token, tokenType, function (data) {
                         try {
                           var json = JSON.parse(data);
