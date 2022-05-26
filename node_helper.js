@@ -31,36 +31,33 @@ module.exports = NodeHelper.create({
 
           bmwrequest.call(self.config.apiBase, '/api/me/vehicles/v2', '', token, tokenType,
             function (data) {
+			  console.log("get info succes"+data)
               try {
                 var json = JSON.parse(data);
                 vin = json[0].vin;
               } catch (err) {
                 console.error("Failed to parse data " + data + ", error " + err);
               }
+              var getInfoUri = `/eadrax-vcs/v1/vehicles?apptimezone=0&appDateTime=${new Date().getTime()}&tireGuardMode=ENABLED`
 
-              var getInfoUri = '/api/vehicle/dynamic/v1/' + vin
-              bmwrequest.call(self.config.apiBase, getInfoUri, '', token, tokenType,
+
+              bmwrequest.call("cocoapi.bmwgroup.com", getInfoUri, '', token, tokenType,
                 function (data) {
-                  try {
+					console.log("get info2succes"+data)
+
+					try {
                     var json = JSON.parse(data);
-                    var attributes = json.attributesMap;
+                    var attributes = json[0].status; // LIST operation returns all cars of the account, here we take the first one
 
                     self.bmwInfo = {
-                      updateTime: moment.unix(attributes.updateTime_converted_timestamp / 1000).format(),
-                      doorLock: attributes.door_lock_state,
-                      electricRange: Number(attributes.beRemainingRangeElectricMile).toFixed(),
-                      fuelRange: Number(attributes.beRemainingRangeFuelMile).toFixed(),
-                      mileage: Number(attributes.mileage).toFixed(),
-                      connectorStatus: attributes.connectorStatus,
+                      updateTime: attributes.lastUpdatedAt,
+                      doorLock: attributes.doorsGeneralState,
+                      fuelRange: attributes.fuelIndicators[0].rangeValue,
+                      mileage: attributes.currentMileage.formattedMileage,
+                      connectorStatus: attributes.checkControlMessagesGeneralState,
                       vin: vin,
-                      chargingLevelHv: Number(attributes.chargingLevelHv).toFixed(),
                       imageUrl: null,
-                      unitOfLength: attributes.unitOfLength
-                    }
-
-                    if (self.config.distance === "km") {
-                      self.bmwInfo.electricRange = Number(attributes.beRemainingRangeElectricKm).toFixed();
-                      self.bmwInfo.fuelRange = Number(attributes.beRemainingRangeFuelKm).toFixed();
+                      unitOfLength: attributes.fuelIndicators.rangeUnits
                     }
 
 

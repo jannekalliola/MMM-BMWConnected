@@ -83,7 +83,7 @@ Module.register('MMM-BMWConnected', {
 
     var locked = document.createElement("span");
     locked.classList.add("locked");
-    if (info.doorLock === "SECURED" || info.doorLock === "LOCKED") {
+    if (info.doorLock === "Locked") {
       locked.appendChild(this.faIconFactory("fa-lock"));
     } else {
       locked.appendChild(this.faIconFactory("fa-lock-open"));
@@ -101,9 +101,21 @@ Module.register('MMM-BMWConnected', {
     //
     carContainer = document.createElement("div");
     carContainer.classList.add("bmw-container");
+	  var dummy = document.createElement("span");
+	  dummy.classList.add("plugged");
+	  carContainer.appendChild(dummy);
+	  wrapper.appendChild(carContainer);
 
 
+	  carContainer = document.createElement("div");
+	  carContainer.classList.add("bmw-container");
+	  var dummy2 = document.createElement("span");
+	  dummy2.classList.add("plugged");
+	  carContainer.appendChild(dummy2);
+	  wrapper.appendChild(carContainer);
+	  /** looks like for electric cars only, need to add check here
     var plugged = document.createElement("span");
+
     plugged.classList.add("plugged");
     if (info.connectorStatus == "CONNECTED") {
       plugged.appendChild(this.faIconFactory("fa-bolt"));
@@ -147,7 +159,10 @@ Module.register('MMM-BMWConnected', {
     elecRange.appendChild(this.faIconFactory("fa-charging-station"));
     elecRange.appendChild(document.createTextNode(info.electricRange + " " + distanceSuffix));
     carContainer.appendChild(elecRange);
+	   */
 
+  	carContainer = document.createElement("div");
+  	carContainer.classList.add("bmw-container");
     var fuelRange = document.createElement("span");
     fuelRange.classList.add("fuelRange");
     fuelRange.appendChild(this.faIconFactory("fa-gas-pump"));
