@@ -81,38 +81,31 @@ Module.register('MMM-BMWConnected', {
     var carContainer = document.createElement("div");
     carContainer.classList.add("bmw-container");
 
-    var locked = document.createElement("span");
-    locked.classList.add("locked");
-    if (info.doorLock === "Locked") {
-      locked.appendChild(this.faIconFactory("fa-lock"));
-    } else {
-      locked.appendChild(this.faIconFactory("fa-lock-open"));
-    }
-    carContainer.appendChild(locked);
-
     var mileage = document.createElement("span");
     mileage.classList.add("mileage");
     mileage.appendChild(this.faIconFactory("fa-road"));
     mileage.appendChild(document.createTextNode(info.mileage + " " + distanceSuffix));
     carContainer.appendChild(mileage);
 
+	  var fuelRange = document.createElement("span");
+	  fuelRange.classList.add("fuelRange");
+	  fuelRange.appendChild(this.faIconFactory("fa-gas-pump"));
+	  fuelRange.appendChild(document.createTextNode(info.fuelRange + " " + distanceSuffix));
+	  carContainer.appendChild(fuelRange);
+
+	  var locked = document.createElement("span");
+	  locked.classList.add("locked");
+	  if (info.doorLock === "Locked") {
+		  locked.appendChild(this.faIconFactory("fa-lock"));
+	  } else {
+		  locked.appendChild(this.faIconFactory("fa-lock-open"));
+	  }
+	  carContainer.appendChild(locked);
+
     wrapper.appendChild(carContainer);
 
-    //
-    carContainer = document.createElement("div");
-    carContainer.classList.add("bmw-container");
-	  var dummy = document.createElement("span");
-	  dummy.classList.add("plugged");
-	  carContainer.appendChild(dummy);
-	  wrapper.appendChild(carContainer);
 
 
-	  carContainer = document.createElement("div");
-	  carContainer.classList.add("bmw-container");
-	  var dummy2 = document.createElement("span");
-	  dummy2.classList.add("plugged");
-	  carContainer.appendChild(dummy2);
-	  wrapper.appendChild(carContainer);
 	  /** looks like for electric cars only, need to add check here
     var plugged = document.createElement("span");
 
@@ -161,14 +154,6 @@ Module.register('MMM-BMWConnected', {
     carContainer.appendChild(elecRange);
 	   */
 
-  	carContainer = document.createElement("div");
-  	carContainer.classList.add("bmw-container");
-    var fuelRange = document.createElement("span");
-    fuelRange.classList.add("fuelRange");
-    fuelRange.appendChild(this.faIconFactory("fa-gas-pump"));
-    fuelRange.appendChild(document.createTextNode(info.fuelRange + " " + distanceSuffix));
-    carContainer.appendChild(fuelRange);
-    wrapper.appendChild(carContainer);
 
     //
     carContainer = document.createElement("div");

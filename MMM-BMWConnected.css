@@ -22,7 +22,7 @@
 }
 
 .MMM-BMWConnected .bmw-container .mileage {
-  float: right;
+  float: left;
 
 }
 
@@ -32,5 +32,9 @@
 }
 
 .MMM-BMWConnected .bmw-container .fuelRange {
-  float: right;
+  float: left;
+}
+
+.MMM-BMWConnected .bmw-container .locked {
+  float: left;
 }
