@@ -1,18 +1,15 @@
 .MMM-BMWConnected .bmw-container {
-  width: 480px;
+  width: 320px;
   line-height: 1.50;
   font-size: 20px;
-  margin: 0;
+  margin-right: 20px;
   padding: 0;
-  border-bottom: solid 1px #222;
   position: relative;
   text-align: left;
 }
 
 .MMM-BMWConnected .bmw-container img {
   position: absolute;
-  top: 0px;
-  left: -5px;
   width: 320px;
 }
 
@@ -21,20 +18,19 @@
   text-align: center;
 }
 
-.MMM-BMWConnected .bmw-container .mileage {
-  float: left;
+.MMM-BMWConnected .bmw-container .locked {
+  width: 30px;
+  text-align: center;
+  margin-right: 30px;
+}
 
+.MMM-BMWConnected .bmw-container .mileage {
+  width: 30px;
+  text-align: center;
+  margin-right: 30px;
 }
 
 .MMM-BMWConnected .bmw-container .updated {
   font: bold 16px Helvetica, Sans-Serif;
-  text-align: center !important;
-}
-
-.MMM-BMWConnected .bmw-container .fuelRange {
-  float: left;
-}
-
-.MMM-BMWConnected .bmw-container .locked {
-  float: left;
+  text-align: left !important;
 }

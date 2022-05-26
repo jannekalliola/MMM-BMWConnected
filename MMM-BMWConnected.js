@@ -1,5 +1,4 @@
-Module.register('MMM-BMWConnected', {
-
+Module.register("MMM-BMWConnected", {
   defaults: {
     apiBase: "www.bmw-connecteddrive.co.uk",
     refresh: 15,
@@ -21,8 +20,8 @@ Module.register('MMM-BMWConnected', {
   },
 
   start: function () {
-    Log.info('Starting module: ' + this.name);
-    this.sendSocketNotification('MMM-BMWCONNECTED-CONFIG', this.config);
+    Log.info("Starting module: " + this.name);
+    this.sendSocketNotification("MMM-BMWCONNECTED-CONFIG", this.config);
     this.bmwInfo = {};
     this.getInfo();
     this.timer = null;
@@ -42,8 +41,10 @@ Module.register('MMM-BMWConnected', {
   },
 
   socketNotificationReceived: function (notification, payload) {
-
-    if (notification == "MMM-BMWCONNECTED-RESPONSE" + this.identifier && Object.keys(payload).length > 0) {
+    if (
+      notification === "MMM-BMWCONNECTED-RESPONSE" + this.identifier &&
+      Object.keys(payload).length > 0
+    ) {
       this.bmwInfo = payload;
       this.updateDom(1000);
     }
@@ -53,11 +54,10 @@ Module.register('MMM-BMWConnected', {
     var faIcon = document.createElement("i");
     faIcon.classList.add("fas");
     faIcon.classList.add(icon);
-    return (faIcon);
+    return faIcon;
   },
 
   getDom: function () {
-
     var distanceSuffix = "mi";
     if (this.config.distance === "km") {
       distanceSuffix = "km";
@@ -70,43 +70,56 @@ Module.register('MMM-BMWConnected', {
       return wrapper;
     }
 
-    if (Object.keys(this.bmwInfo).length == 0) {
+    if (Object.keys(this.bmwInfo).length === 0) {
       wrapper.innerHTML = this.translate("LOADING");
       wrapper.className = "dimmed light small";
       return wrapper;
     }
 
-    var info = this.bmwInfo;
+    let info = this.bmwInfo;
 
-    var carContainer = document.createElement("div");
+    let carImgContainer = document.createElement("div");
+    carImgContainer.classList.add("bmw-container");
+    let imageContainer = document.createElement("span");
+    let imageObject = document.createElement("img");
+    imageObject.setAttribute("src", info.imageUrl);
+    imageContainer.appendChild(imageObject);
+    carImgContainer.appendChild(imageContainer);
+	wrapper.appendChild(carImgContainer);
+
+
+    let carContainer = document.createElement("div");
     carContainer.classList.add("bmw-container");
 
-    var mileage = document.createElement("span");
+    let locked = document.createElement("span");
+    locked.classList.add("locked");
+    if (info.doorLock === "Locked") {
+      locked.appendChild(this.faIconFactory("fa-lock"));
+    } else {
+      locked.appendChild(this.faIconFactory("fa-lock-open"));
+    }
+    carContainer.appendChild(locked);
+
+    let mileage = document.createElement("span");
     mileage.classList.add("mileage");
     mileage.appendChild(this.faIconFactory("fa-road"));
-    mileage.appendChild(document.createTextNode(info.mileage + " " + distanceSuffix));
+    mileage.appendChild(
+      document.createTextNode(info.mileage + " " + distanceSuffix)
+    );
     carContainer.appendChild(mileage);
 
-	  var fuelRange = document.createElement("span");
-	  fuelRange.classList.add("fuelRange");
-	  fuelRange.appendChild(this.faIconFactory("fa-gas-pump"));
-	  fuelRange.appendChild(document.createTextNode(info.fuelRange + " " + distanceSuffix));
-	  carContainer.appendChild(fuelRange);
-
-	  var locked = document.createElement("span");
-	  locked.classList.add("locked");
-	  if (info.doorLock === "Locked") {
-		  locked.appendChild(this.faIconFactory("fa-lock"));
-	  } else {
-		  locked.appendChild(this.faIconFactory("fa-lock-open"));
-	  }
-	  carContainer.appendChild(locked);
+    let fuelRange = document.createElement("span");
+    fuelRange.classList.add("fuelRange");
+    fuelRange.appendChild(this.faIconFactory("fa-gas-pump"));
+    fuelRange.appendChild(
+      document.createTextNode(info.fuelRange + " " + distanceSuffix)
+    );
+    carContainer.appendChild(fuelRange);
 
     wrapper.appendChild(carContainer);
 
-
-
-	  /** looks like for electric cars only, need to add check here
+    /**
+     looks like for electric cars only, need to add check here
     var plugged = document.createElement("span");
 
     plugged.classList.add("plugged");
@@ -152,37 +165,25 @@ Module.register('MMM-BMWConnected', {
     elecRange.appendChild(this.faIconFactory("fa-charging-station"));
     elecRange.appendChild(document.createTextNode(info.electricRange + " " + distanceSuffix));
     carContainer.appendChild(elecRange);
-	   */
-
+     */
 
     //
-    carContainer = document.createElement("div");
-    carContainer.classList.add("bmw-container");
-    carContainer.classList.add("updated");
-    var updated = document.createElement("span");
+    let carContainer2 = document.createElement("div");
+    carContainer2.classList.add("bmw-container");
+
+    let updated = document.createElement("span");
     updated.classList.add("updated");
     updated.appendChild(this.faIconFactory("fa-info"));
-    var lastUpdateText = "last updated " + moment(info.updateTime).fromNow();
+    let lastUpdateText = "Updated " + moment(info.updateTime).fromNow();
     if (this.config.debug) {
       lastUpdateText += " [" + info.unitOfLength + "]";
     }
     updated.appendChild(document.createTextNode(lastUpdateText));
-    carContainer.appendChild(updated);
-    wrapper.appendChild(carContainer);
 
-    //
+    carContainer2.appendChild(updated);
+    wrapper.appendChild(carContainer2); //
 
-    carContainer = document.createElement("div");
-    carContainer.classList.add("bmw-container");
-    var imageContainer = document.createElement("span");
-    var imageObject = document.createElement("img");
-    imageObject.setAttribute('src', info.imageUrl);
-    imageContainer.appendChild(imageObject);
-    carContainer.appendChild(imageContainer);
-
-    wrapper.appendChild(carContainer);
 
     return wrapper;
   }
-
 });
