@@ -37,8 +37,7 @@ module.exports = NodeHelper.create({
               } catch (err) {
                 console.error("Failed to parse data " + data + ", error " + err);
               }
-              var getInfoUri = `/eadrax-vcs/v1/vehicles?apptimezone=0&appDateTime=${new Date().getTime()}&tireGuardMode=ENABLED`
-
+              var getInfoUri = `/eadrax-vcs/v1/vehicles?apptimezone=0&appDateTime=${new Date().getTime()}&tireGuardMode=ENABLED`;
 
               bmwrequest.call("cocoapi.bmwgroup.com", getInfoUri, '', token, tokenType,
                 function (data) {
