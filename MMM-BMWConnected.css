@@ -5,7 +5,6 @@
   width: 320px;
   line-height: 1.50;
   font-size: 20px;
-  margin-right: 20px;
   padding: 0;
   position: relative;
   text-align: left;
@@ -14,6 +13,8 @@
 .MMM-BMWConnected .bmw-container img {
   position: absolute;
   width: 320px;
+  top: -215px;
+  left: -5px;
 }
 
 .MMM-BMWConnected .bmw-container .fas {
@@ -28,9 +29,11 @@
 }
 
 .MMM-BMWConnected .bmw-container .mileage {
-  width: 30px;
-  text-align: center;
-  margin-right: 30px;
+  float: right;
+}
+
+.MMM-BMWConnected .bmw-container .fuelRange {
+  float: right;
 }
 
 .MMM-BMWConnected .bmw-container .updated {

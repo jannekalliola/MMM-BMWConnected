@@ -10,7 +10,7 @@ The module displays icons to show lock, charging and battery status, electric an
 Clone this repository in your modules folder, and install dependencies:
 
     cd ~/MagicMirror/modules 
-    git clone https://github.com/hdurdle/MMM-BMWConnected.git
+    git clone https://github.com/jannekalliola/MMM-BMWConnected.git
     cd MMM-BMWConnected
     npm install 
 
@@ -68,25 +68,31 @@ The module has a few configuration options:
       <td><code>distance</code></td>
       <td>The unit of distance used for mileage and range. <br /><br /><strong>Default: </strong><code>miles</code><br/>Can be: miles or km.</td>
     </tr>
+    <tr>
+      <td><code>showMileage</code></td>
+      <td>Whether to show the mileage. <br /><br /><strong>Default: </strong><code>true</code>
+    </tr>
+    <tr>
+      <td><code>showElectricRange</code></td>
+      <td>Whether to show the electric range. <br /><br /><strong>Default: </strong><code>true</code>
+    </tr>
+    <tr>
+      <td><code>showElectricPercentage</code></td>
+      <td>Whether to show the battery charging also in percentages. <br /><br /><strong>Default: </strong><code>false</code>
+    </tr>
+    <tr>
+      <td><code>showFuelRange</code></td>
+      <td>Whether to show the fuel range. <br /><br /><strong>Default: </strong><code>true</code>
+    </tr>
+    <tr>
+      <td><code>lastUpdatedText</code></td>
+      <td>The text to be shown before last updated timestamp. <br /><br /><strong>Default: </strong><code>last updated</code>
+    </tr>
   </tbody>
 </table>
-
-## Notes
-
-If possible the module will pull an image of your car from BMW's API. I only have one BMW, so can't test the placement/graphics of other vehicles. I'd love to see what it looks like if you try it.  Tweet images to me at https://twitter.com/hdurdle 
-
-## No Data?
-
-So far this is confirmed working in Europe and the USA.  If you're somewhere else, please visit my [Powershell BMW repository](https://github.com/hdurdle/bmw-powershell) and follow the instructions there to run `Get-BMWInfo.ps1`.  Send me the output and I'll be able to update the module to work in your country.
-
-## Help
-
-If you have a moment, please set <code>debug</code> to <code>true</code> in the config and see what text appears in <code>[ ]</code> after the last updated time.  I'm trying to see what the BMW API returns for countries that use KM instead of miles.  I might be able to avoid making it a config option and pull it direct from the API.  Tweet images and comments to me at https://twitter.com/hdurdle 
-
-![Debug Screenshot](debug.png "Debug Screenshot")
-
-Also, if you can offer translations for the few bits of direct text ("last updated") for your language, let me know (along with where the placeholder should go in your language!).
 
 ## Thanks
 
 Hat tip to [Nils Schneider](https://github.com/Lyve1981/BMW-ConnectedDrive-JSON-Wrapper) for the library code for performing the BMW authentication dance.
+
+Thanks to [Eugen](https://github.com/yfre/MMM-BMWConnected) for fixing the connectivity issues.

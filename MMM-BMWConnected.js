@@ -79,112 +79,127 @@ Module.register("MMM-BMWConnected", {
 
     let info = this.bmwInfo;
 
-    let carImgContainer = document.createElement("div");
-    carImgContainer.classList.add("bmw-container");
-    let imageContainer = document.createElement("span");
-    let imageObject = document.createElement("img");
-    imageObject.setAttribute("src", info.imageUrl);
-    imageContainer.appendChild(imageObject);
-    carImgContainer.appendChild(imageContainer);
-	wrapper.appendChild(carImgContainer);
+      var carContainer = document.createElement("div");
+      carContainer.classList.add("bmw-container");
+
+      var locked = document.createElement("span");
+      locked.classList.add("locked");
+	  var lockInfo = info.doorLock.toLowerCase();
+      if (lockInfo === "secured" || lockInfo === "locked") {
+          locked.appendChild(this.faIconFactory("fa-lock"));
+      } else {
+          locked.appendChild(this.faIconFactory("fa-lock-open"));
+      }
+      carContainer.appendChild(locked);
+
+      var mileage = document.createElement("span");
+      mileage.classList.add("mileage");
+      if (this.config.showMileage) {
+          mileage.appendChild(this.faIconFactory("fa-road"));
+          mileage.appendChild(document.createTextNode(info.mileage + " " + distanceSuffix));
+      } else {
+          mileage.appendChild(document.createTextNode("\u00a0"));
+      }
+      carContainer.appendChild(mileage);
+      wrapper.appendChild(carContainer);
+
+      //
+      carContainer = document.createElement("div");
+      carContainer.classList.add("bmw-container");
 
 
-    let carContainer = document.createElement("div");
-    carContainer.classList.add("bmw-container");
+      var plugged = document.createElement("span");
+      plugged.classList.add("plugged");
+      if (info.connectorStatus == "CONNECTED") {
+          plugged.appendChild(this.faIconFactory("fa-bolt"));
+      } else {
+          plugged.appendChild(this.faIconFactory("fa-plug"));
+      }
+      carContainer.appendChild(plugged);
 
-    let locked = document.createElement("span");
-    locked.classList.add("locked");
-    if (info.doorLock === "Locked") {
-      locked.appendChild(this.faIconFactory("fa-lock"));
-    } else {
-      locked.appendChild(this.faIconFactory("fa-lock-open"));
-    }
-    carContainer.appendChild(locked);
+      wrapper.appendChild(carContainer);
 
-    let mileage = document.createElement("span");
-    mileage.classList.add("mileage");
-    mileage.appendChild(this.faIconFactory("fa-road"));
-    mileage.appendChild(
-      document.createTextNode(info.mileage + " " + distanceSuffix)
-    );
-    carContainer.appendChild(mileage);
+      carContainer = document.createElement("div");
+      carContainer.classList.add("bmw-container");
+      var battery = document.createElement("span");
+      battery.classList.add("battery");
 
-    let fuelRange = document.createElement("span");
-    fuelRange.classList.add("fuelRange");
-    fuelRange.appendChild(this.faIconFactory("fa-gas-pump"));
-    fuelRange.appendChild(
-      document.createTextNode(info.fuelRange + " " + distanceSuffix)
-    );
-    carContainer.appendChild(fuelRange);
-
-    wrapper.appendChild(carContainer);
-
-    /**
-     looks like for electric cars only, need to add check here
-    var plugged = document.createElement("span");
-
-    plugged.classList.add("plugged");
-    if (info.connectorStatus == "CONNECTED") {
-      plugged.appendChild(this.faIconFactory("fa-bolt"));
-    } else {
-      plugged.appendChild(this.faIconFactory("fa-plug"));
-    }
-    carContainer.appendChild(plugged);
-
-    wrapper.appendChild(carContainer);
-
-    carContainer = document.createElement("div");
-    carContainer.classList.add("bmw-container");
-    var battery = document.createElement("span");
-    battery.classList.add("battery");
-
-    switch (true) {
+      switch (true) {
       case (info.chargingLevelHv < 25):
-        battery.appendChild(this.faIconFactory("fa-battery-empty"));
-        break;
+          battery.appendChild(this.faIconFactory("fa-battery-empty"));
+          break;
       case (info.chargingLevelHv < 50):
-        battery.appendChild(this.faIconFactory("fa-battery-quarter"));
-        break;
+          battery.appendChild(this.faIconFactory("fa-battery-quarter"));
+          break;
       case (info.chargingLevelHv < 75):
-        battery.appendChild(this.faIconFactory("fa-battery-half"));
-        break;
+          battery.appendChild(this.faIconFactory("fa-battery-half"));
+          break;
       case (info.chargingLevelHv < 100):
-        battery.appendChild(this.faIconFactory("fa-battery-three-quarters"));
-        break;
+          battery.appendChild(this.faIconFactory("fa-battery-three-quarters"));
+          break;
       default:
-        battery.appendChild(this.faIconFactory("fa-battery-full"));
-        break;
-    }
+          battery.appendChild(this.faIconFactory("fa-battery-full"));
+          break;
+      }
 
-    carContainer.appendChild(battery);
-    wrapper.appendChild(carContainer);
+      if (this.config.showElectricPercentage) {
+          battery.appendChild(document.createTextNode(info.chargingLevelHv + " %"));
+      }
+      carContainer.appendChild(battery);
+      wrapper.appendChild(carContainer);
 
-    carContainer = document.createElement("div");
-    carContainer.classList.add("bmw-container");
-    var elecRange = document.createElement("span");
-    elecRange.classList.add("elecRange");
-    elecRange.appendChild(this.faIconFactory("fa-charging-station"));
-    elecRange.appendChild(document.createTextNode(info.electricRange + " " + distanceSuffix));
-    carContainer.appendChild(elecRange);
-     */
+      carContainer = document.createElement("div");
+      carContainer.classList.add("bmw-container");
 
-    //
-    let carContainer2 = document.createElement("div");
-    carContainer2.classList.add("bmw-container");
+      var elecRange = document.createElement("span");
+      elecRange.classList.add("elecRange");
+      if (this.config.showElectricRange) {
+          elecRange.appendChild(this.faIconFactory("fa-charging-station"));
+          elecRange.appendChild(document.createTextNode(info.electricRange + " " + distanceSuffix));
+      } else {
+          elecRange.appendChild(document.createTextNode("\u00a0"));
+      }
+      carContainer.appendChild(elecRange);
 
-    let updated = document.createElement("span");
-    updated.classList.add("updated");
-    updated.appendChild(this.faIconFactory("fa-info"));
-    let lastUpdateText = "Updated " + moment(info.updateTime).fromNow();
-    if (this.config.debug) {
-      lastUpdateText += " [" + info.unitOfLength + "]";
-    }
-    updated.appendChild(document.createTextNode(lastUpdateText));
+      var fuelRange = document.createElement("span");
+      fuelRange.classList.add("fuelRange");
+      if (this.config.showFuelRange) {
+          fuelRange.appendChild(this.faIconFactory("fa-gas-pump"));
+          fuelRange.appendChild(document.createTextNode(info.fuelRange + " " + distanceSuffix));
+      } else {
+          fuelRange.appendChild(document.createTextNode("\u00a0"));
+      }
+      carContainer.appendChild(fuelRange);
+      wrapper.appendChild(carContainer);
 
-    carContainer2.appendChild(updated);
-    wrapper.appendChild(carContainer2); //
+      //
+      carContainer = document.createElement("div");
+      carContainer.classList.add("bmw-container");
+      carContainer.classList.add("updated");
+      var updated = document.createElement("span");
+      updated.classList.add("updated");
+      updated.appendChild(this.faIconFactory("fa-info"));
+      var lastUpdateText = this.config.lastUpdatedText + " " + moment(info.updateTime).fromNow();
+      if (this.config.debug) {
+          lastUpdateText += " [" + info.unitOfLength + "]";
+      }
+      updated.appendChild(document.createTextNode(lastUpdateText));
+      carContainer.appendChild(updated);
+      wrapper.appendChild(carContainer);
 
+      //
 
-    return wrapper;
+      carContainer = document.createElement("div");
+      carContainer.classList.add("bmw-container");
+      var imageContainer = document.createElement("span");
+      var imageObject = document.createElement("img");
+      imageObject.setAttribute('src', info.imageUrl);
+      imageObject.setAttribute('style', 'opacity: ' + this.config.vehicleOpacity + ';');
+      imageContainer.appendChild(imageObject);
+      carContainer.appendChild(imageContainer);
+
+      wrapper.appendChild(carContainer);
+
+      return wrapper;
   }
 });

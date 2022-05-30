@@ -44,16 +44,19 @@ module.exports = NodeHelper.create({
 					try {
                     var json = JSON.parse(data);
                     var attributes = json[0].status; // LIST operation returns all cars of the account, here we take the first one
-
+					    var properties = json[0].properties;
+					    
                     self.bmwInfo = {
-                      updateTime: attributes.lastUpdatedAt,
-                      doorLock: attributes.doorsGeneralState,
-                      fuelRange: attributes.fuelIndicators[0].rangeValue,
-                      mileage: attributes.currentMileage.formattedMileage,
-                      connectorStatus: attributes.checkControlMessagesGeneralState,
-                      vin: vin,
-                      imageUrl: null,
-                      unitOfLength: attributes.fuelIndicators.rangeUnits
+						updateTime: attributes.lastUpdatedAt,
+						doorLock: attributes.doorsGeneralState,
+						fuelRange: properties.combustionRange.distance.value,
+						electricRange: properties.electricRange.distance.value,
+						chargingLevelHv: properties.chargingState.chargePercentage,
+						mileage: attributes.currentMileage.formattedMileage,
+						connectorStatus: attributes.checkControlMessagesGeneralState,
+						vin: vin,
+						imageUrl: null,
+						unitOfLength: attributes.fuelIndicators.rangeUnits
                     }
 
 
