@@ -3,6 +3,7 @@ Module.register("MMM-BMWConnected", {
     apiBase: "www.bmw-connecteddrive.co.uk",
     refresh: 15,
     vehicleAngle: 300,
+    vehicleOpacity: 0.75,
     distance: "miles",
     debug: false
   },
@@ -82,6 +83,17 @@ Module.register("MMM-BMWConnected", {
     var carContainer = document.createElement("div");
     carContainer.classList.add("bmw-container");
 
+    carContainer = document.createElement("div");
+    carContainer.classList.add("bmw-container");
+    var imageContainer = document.createElement("span");
+    var imageObject = document.createElement("img");
+    imageObject.setAttribute('src', info.imageUrl);
+    imageObject.setAttribute('style', 'opacity: ' + this.config.vehicleOpacity + ';');
+    imageContainer.appendChild(imageObject);
+    carContainer.appendChild(imageContainer);
+    
+    wrapper.appendChild(carContainer);
+
     var locked = document.createElement("span");
     locked.classList.add("locked");
 	  var lockInfo = info.doorLock.toLowerCase();
@@ -96,6 +108,13 @@ Module.register("MMM-BMWConnected", {
     mileage.classList.add("mileage");
     if (this.config.showMileage) {
       mileage.appendChild(this.faIconFactory("fa-road"));
+      if(distanceSuffix != info.mileage) {
+        if(distanceSuffix == 'km') {
+          info.mileage = Math.floor(info.mileage * 1.60934);
+        } else {
+          info.mileage = Math.floor(info.mileage * 0.621371);
+        }  
+      }  
       mileage.appendChild(document.createTextNode(info.mileage + " " + distanceSuffix));
     } else {
       mileage.appendChild(document.createTextNode("\u00a0"));
@@ -184,17 +203,6 @@ Module.register("MMM-BMWConnected", {
     carContainer.appendChild(updated);
     wrapper.appendChild(carContainer);
     
-    carContainer = document.createElement("div");
-    carContainer.classList.add("bmw-container");
-    var imageContainer = document.createElement("span");
-    var imageObject = document.createElement("img");
-    imageObject.setAttribute('src', info.imageUrl);
-    imageObject.setAttribute('style', 'opacity: ' + this.config.vehicleOpacity + ';');
-    imageContainer.appendChild(imageObject);
-    carContainer.appendChild(imageContainer);
-    
-    wrapper.appendChild(carContainer);
-
     return wrapper;
   }
 });
