@@ -79,127 +79,122 @@ Module.register("MMM-BMWConnected", {
 
     let info = this.bmwInfo;
 
-      var carContainer = document.createElement("div");
-      carContainer.classList.add("bmw-container");
+    var carContainer = document.createElement("div");
+    carContainer.classList.add("bmw-container");
 
-      var locked = document.createElement("span");
-      locked.classList.add("locked");
+    var locked = document.createElement("span");
+    locked.classList.add("locked");
 	  var lockInfo = info.doorLock.toLowerCase();
-      if (lockInfo === "secured" || lockInfo === "locked") {
-          locked.appendChild(this.faIconFactory("fa-lock"));
-      } else {
-          locked.appendChild(this.faIconFactory("fa-lock-open"));
-      }
-      carContainer.appendChild(locked);
+    if (lockInfo === "secured" || lockInfo === "locked") {
+      locked.appendChild(this.faIconFactory("fa-lock"));
+    } else {
+      locked.appendChild(this.faIconFactory("fa-lock-open"));
+    }
+    carContainer.appendChild(locked);
 
-      var mileage = document.createElement("span");
-      mileage.classList.add("mileage");
-      if (this.config.showMileage) {
-          mileage.appendChild(this.faIconFactory("fa-road"));
-          mileage.appendChild(document.createTextNode(info.mileage + " " + distanceSuffix));
-      } else {
-          mileage.appendChild(document.createTextNode("\u00a0"));
-      }
-      carContainer.appendChild(mileage);
-      wrapper.appendChild(carContainer);
+    var mileage = document.createElement("span");
+    mileage.classList.add("mileage");
+    if (this.config.showMileage) {
+      mileage.appendChild(this.faIconFactory("fa-road"));
+      mileage.appendChild(document.createTextNode(info.mileage + " " + distanceSuffix));
+    } else {
+      mileage.appendChild(document.createTextNode("\u00a0"));
+    }
+    carContainer.appendChild(mileage);
+    wrapper.appendChild(carContainer);
 
-      //
-      carContainer = document.createElement("div");
-      carContainer.classList.add("bmw-container");
+    carContainer = document.createElement("div");
+    carContainer.classList.add("bmw-container");
 
+    var plugged = document.createElement("span");
+    plugged.classList.add("plugged");
+    if (info.connectorStatus == "CONNECTED") {
+      plugged.appendChild(this.faIconFactory("fa-bolt"));
+    } else {
+      plugged.appendChild(this.faIconFactory("fa-plug"));
+    }
+    carContainer.appendChild(plugged);
+    
+    wrapper.appendChild(carContainer);
 
-      var plugged = document.createElement("span");
-      plugged.classList.add("plugged");
-      if (info.connectorStatus == "CONNECTED") {
-          plugged.appendChild(this.faIconFactory("fa-bolt"));
-      } else {
-          plugged.appendChild(this.faIconFactory("fa-plug"));
-      }
-      carContainer.appendChild(plugged);
+    carContainer = document.createElement("div");
+    carContainer.classList.add("bmw-container");
+    var battery = document.createElement("span");
+    battery.classList.add("battery");
+    
+    switch (true) {
+    case (info.chargingLevelHv < 25):
+      battery.appendChild(this.faIconFactory("fa-battery-empty"));
+      break;
+    case (info.chargingLevelHv < 50):
+      battery.appendChild(this.faIconFactory("fa-battery-quarter"));
+      break;
+    case (info.chargingLevelHv < 75):
+      battery.appendChild(this.faIconFactory("fa-battery-half"));
+      break;
+    case (info.chargingLevelHv < 100):
+      battery.appendChild(this.faIconFactory("fa-battery-three-quarters"));
+      break;
+    default:
+      battery.appendChild(this.faIconFactory("fa-battery-full"));
+      break;
+    }
 
-      wrapper.appendChild(carContainer);
+    if (this.config.showElectricPercentage) {
+      battery.appendChild(document.createTextNode(info.chargingLevelHv + " %"));
+    }
+    carContainer.appendChild(battery);
+    wrapper.appendChild(carContainer);
+    
+    carContainer = document.createElement("div");
+    carContainer.classList.add("bmw-container");
 
-      carContainer = document.createElement("div");
-      carContainer.classList.add("bmw-container");
-      var battery = document.createElement("span");
-      battery.classList.add("battery");
+    var elecRange = document.createElement("span");
+    elecRange.classList.add("elecRange");
+    if (this.config.showElectricRange) {
+      elecRange.appendChild(this.faIconFactory("fa-charging-station"));
+      elecRange.appendChild(document.createTextNode(info.electricRange + " " + distanceSuffix));
+    } else {
+      elecRange.appendChild(document.createTextNode("\u00a0"));
+    }
+    carContainer.appendChild(elecRange);
+    
+    var fuelRange = document.createElement("span");
+    fuelRange.classList.add("fuelRange");
+    if (this.config.showFuelRange) {
+      fuelRange.appendChild(this.faIconFactory("fa-gas-pump"));
+      fuelRange.appendChild(document.createTextNode(info.fuelRange + " " + distanceSuffix));
+    } else {
+      fuelRange.appendChild(document.createTextNode("\u00a0"));
+    }
+    carContainer.appendChild(fuelRange);
+    wrapper.appendChild(carContainer);
+    
+    carContainer = document.createElement("div");
+    carContainer.classList.add("bmw-container");
+    carContainer.classList.add("updated");
+    var updated = document.createElement("span");
+    updated.classList.add("updated");
+    updated.appendChild(this.faIconFactory("fa-info"));
+    var lastUpdateText = this.config.lastUpdatedText + " " + moment(info.updateTime).fromNow();
+    if (this.config.debug) {
+      lastUpdateText += " [" + info.unitOfLength + "]";
+    }
+    updated.appendChild(document.createTextNode(lastUpdateText));
+    carContainer.appendChild(updated);
+    wrapper.appendChild(carContainer);
+    
+    carContainer = document.createElement("div");
+    carContainer.classList.add("bmw-container");
+    var imageContainer = document.createElement("span");
+    var imageObject = document.createElement("img");
+    imageObject.setAttribute('src', info.imageUrl);
+    imageObject.setAttribute('style', 'opacity: ' + this.config.vehicleOpacity + ';');
+    imageContainer.appendChild(imageObject);
+    carContainer.appendChild(imageContainer);
+    
+    wrapper.appendChild(carContainer);
 
-      switch (true) {
-      case (info.chargingLevelHv < 25):
-          battery.appendChild(this.faIconFactory("fa-battery-empty"));
-          break;
-      case (info.chargingLevelHv < 50):
-          battery.appendChild(this.faIconFactory("fa-battery-quarter"));
-          break;
-      case (info.chargingLevelHv < 75):
-          battery.appendChild(this.faIconFactory("fa-battery-half"));
-          break;
-      case (info.chargingLevelHv < 100):
-          battery.appendChild(this.faIconFactory("fa-battery-three-quarters"));
-          break;
-      default:
-          battery.appendChild(this.faIconFactory("fa-battery-full"));
-          break;
-      }
-
-      if (this.config.showElectricPercentage) {
-          battery.appendChild(document.createTextNode(info.chargingLevelHv + " %"));
-      }
-      carContainer.appendChild(battery);
-      wrapper.appendChild(carContainer);
-
-      carContainer = document.createElement("div");
-      carContainer.classList.add("bmw-container");
-
-      var elecRange = document.createElement("span");
-      elecRange.classList.add("elecRange");
-      if (this.config.showElectricRange) {
-          elecRange.appendChild(this.faIconFactory("fa-charging-station"));
-          elecRange.appendChild(document.createTextNode(info.electricRange + " " + distanceSuffix));
-      } else {
-          elecRange.appendChild(document.createTextNode("\u00a0"));
-      }
-      carContainer.appendChild(elecRange);
-
-      var fuelRange = document.createElement("span");
-      fuelRange.classList.add("fuelRange");
-      if (this.config.showFuelRange) {
-          fuelRange.appendChild(this.faIconFactory("fa-gas-pump"));
-          fuelRange.appendChild(document.createTextNode(info.fuelRange + " " + distanceSuffix));
-      } else {
-          fuelRange.appendChild(document.createTextNode("\u00a0"));
-      }
-      carContainer.appendChild(fuelRange);
-      wrapper.appendChild(carContainer);
-
-      //
-      carContainer = document.createElement("div");
-      carContainer.classList.add("bmw-container");
-      carContainer.classList.add("updated");
-      var updated = document.createElement("span");
-      updated.classList.add("updated");
-      updated.appendChild(this.faIconFactory("fa-info"));
-      var lastUpdateText = this.config.lastUpdatedText + " " + moment(info.updateTime).fromNow();
-      if (this.config.debug) {
-          lastUpdateText += " [" + info.unitOfLength + "]";
-      }
-      updated.appendChild(document.createTextNode(lastUpdateText));
-      carContainer.appendChild(updated);
-      wrapper.appendChild(carContainer);
-
-      //
-
-      carContainer = document.createElement("div");
-      carContainer.classList.add("bmw-container");
-      var imageContainer = document.createElement("span");
-      var imageObject = document.createElement("img");
-      imageObject.setAttribute('src', info.imageUrl);
-      imageObject.setAttribute('style', 'opacity: ' + this.config.vehicleOpacity + ';');
-      imageContainer.appendChild(imageObject);
-      carContainer.appendChild(imageContainer);
-
-      wrapper.appendChild(carContainer);
-
-      return wrapper;
+    return wrapper;
   }
 });
