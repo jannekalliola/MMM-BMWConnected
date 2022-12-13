@@ -61,7 +61,7 @@ The module has a few configuration options:
     </tr>
     <tr>
       <td><code>apiBase</code></td>
-      <td>The location of the base API URL for your region.<br /><br /><strong>Default: </strong><code>www.bmw-connecteddrive.co.uk</code></td>
+      <td>The location of the base API URL for your region.<br /><br /><strong>Default: </strong><code>cocoapi.bmwgroup.com</code></td>
     </tr>
     <tr>
       <td><code>refresh</code></td>

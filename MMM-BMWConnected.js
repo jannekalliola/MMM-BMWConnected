@@ -1,8 +1,7 @@
 Module.register("MMM-BMWConnected", {
   defaults: {
-    apiBase: "www.bmw-connecteddrive.co.uk",
+    apiBase: "cocoapi.bmwgroup.com",
     refresh: 15,
-    vehicleAngle: 300,
     vehicleOpacity: 0.75,
     distance: "miles",
     debug: false
