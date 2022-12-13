@@ -32,7 +32,7 @@ Enter these details in the config.js for your MagicMirror installation:
             config: {
                 email: "email@example.com",
                 password: "myComplexPassword",
-				vin: "XXXXXXXXXXXXXXXXX"
+                vin: "XXXXXXXXXXXXXXXXX"
             }
         },
 
