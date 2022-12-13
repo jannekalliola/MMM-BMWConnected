@@ -1,5 +1,6 @@
 var NodeHelper = require("node_helper");
 const moment = require('moment');
+const fs = require("fs");
 
 var tokenmanager = require('./lib/tokenmanager.js');
 var bmwrequest = require('./lib/bmwrequest.js');
@@ -8,16 +9,20 @@ module.exports = NodeHelper.create({
 
   start: function () {
     console.log("Starting node_helper for module: " + this.name);
-    this.bmwInfo = null;
+    this.bmwInfo = {};
+    this.config = {};
   },
 
   socketNotificationReceived: function (notification, payload) {
 
     var self = this;
+    var vin = payload.vin;
+      
     if (notification == "MMM-BMWCONNECTED-CONFIG") {
-      self.config = payload;
+      self.config[vin] = payload;
+      self.bmwInfo[vin] = null;
     } else if (notification == "MMM-BMWCONNECTED-GET") {
-
+      var config = self.config[vin];  
       var credConfig = {
         'username': self.config.email,
         'password': self.config.password
@@ -26,62 +31,65 @@ module.exports = NodeHelper.create({
       tokenmanager.initialize(credConfig,
         function onSuccess(token, tokenType) {
 
-          var vin;
-          console.log("Token init completed: " + "\nToken: " + token + "\nTokenType: " + tokenType);
-
-          bmwrequest.call(self.config.apiBase, '/api/me/vehicles/v2', '', token, tokenType,
+//          console.log("Token init completed: " + "\nToken: " + token + "\nTokenType: " + tokenType);
+          bmwrequest.call(self.config[vin].apiBase, '/eadrax-vcs/v2/vehicles', '', token, tokenType,
             function (data) {
               try {
                 var json = JSON.parse(data);
-                vin = json[0].vin;
+                var car = json.find(o => o.vin === vin);
+                if(!car) {
+                  console.log("No vin " + vin + " found on results.");
+                  self.bmwInfo[vin] = {
+                    error: "No matching vin found."
+                  };
+                  return;
+                }
               } catch (err) {
-                console.error("Failed to parse data " + data + ", error " + err);
+                console.error("Failed to parse vehicle list data " + data + ", error " + err);
+                self.bmwInfo[vin] = {
+                  error: "Failed to parse vehicle data."
+                };
+                return;
               }
-              var getInfoUri = `/eadrax-vcs/v1/vehicles?apptimezone=0&appDateTime=${new Date().getTime()}&tireGuardMode=ENABLED`;
 
-              bmwrequest.call("cocoapi.bmwgroup.com", getInfoUri, '', token, tokenType,
+              var getInfoUri = `/eadrax-vcs/v2/vehicles/${vin}/state?apptimezone=0&appDateTime=${new Date().getTime()}&tireGuardMode=ENABLED`;
+
+              bmwrequest.call(self.config[vin].apiBase, getInfoUri, '', token, tokenType,
                 function (data) {
-					try {
+					        try {
                     var json = JSON.parse(data);
-                    var attributes = json[0].status; // LIST operation returns all cars of the account, here we take the first one
-					    var properties = json[0].properties;
-					    
-                    self.bmwInfo = {
-						updateTime: attributes.lastUpdatedAt,
-						doorLock: attributes.doorsGeneralState,
-						fuelRange: properties.combustionRange.distance.value,
-						electricRange: properties.electricRange.distance.value,
-						chargingLevelHv: properties.chargingState.chargePercentage,
-						mileage: attributes.currentMileage.mileage,
-						mileageUnits: attributes.currentMileage.units,
-						connectorStatus: attributes.checkControlMessagesGeneralState,
-						vin: vin,
-						imageUrl: null,
-						unitOfLength: attributes.fuelIndicators.rangeUnits
+                    var attributes = json.state;
+                    self.bmwInfo[vin] = {
+						          updateTime: attributes.lastUpdatedAt,
+						          doorLock: attributes.doorsState.combinedSecurityState,
+						          fuelRange: attributes.combustionFuelLevel.range,
+						          electricRange: attributes.electricChargingState.range,
+						          chargingLevelHv: attributes.electricChargingState.chargingLevelPercent,
+						          mileage: attributes.currentMileage,
+//						          mileageUnits: attributes.currentMileage.units,
+						          connectorStatus: attributes.electricChargingState.isChargerConnected,
+						          vin: vin,
+						          imageUrl: null
+//						          unitOfLength: attributes.fuelIndicators.rangeUnits
                     }
-
-
-                    var getImagesUri = '/api/vehicle/image/v1/' + vin + "?startAngle=0&stepAngle=10&width=320"
-                    bmwrequest.call(self.config.apiBase, getImagesUri, '', token, tokenType, function (data) {
-                        try {
-                          var json = JSON.parse(data);
-                          var angleUrls = json.angleUrls;
-                          var picked = angleUrls.find(o => o.angle === self.config.vehicleAngle);
-                        } catch (err) {
-                          console.error("Failed to parse data " + data + ", error " + err);
-                        }
-                        self.bmwInfo.imageUrl = picked.url;
-                        self.bmwInfo.instanceId = payload.instanceId;
-
+                    var imageFile = 'modules/MMM-BMWConnected/car-' + vin + '.png';
+                    var imageFileExists = fs.existsSync(imageFile);
+                    if(imageFileExists) {
+                      self.bmwInfo[vin].imageUrl = imageFile;
+                      self.parseCarInfo(payload);
+                      return;
+                    }
+                    var getImagesUri = '/eadrax-ics/v3/presentation/vehicles/' + vin + '/images?carView=VehicleStatus';
+                    bmwrequest.download(imageFile, self.config[vin].apiBase, getImagesUri, '', token, tokenType,
+                      function (data) {
+                        self.bmwInfo[vin].imageUrl = imageFile;
                         self.parseCarInfo(payload);
-
                       },
                       function onError(err) {
                         console.error("Failed to read list of vehicle images:" + err);
                       });
-
                   } catch (err) {
-                    console.error("Failed to parse data " + data + ", error " + err);
+                    console.error("Failed to parse vehicle data " + data + ", error " + err);
                   }
                 },
                 function onError(err) {

@@ -32,7 +32,8 @@ Module.register("MMM-BMWConnected", {
     clearTimeout(this.timer);
     this.timer = null;
     this.sendSocketNotification("MMM-BMWCONNECTED-GET", {
-      instanceId: this.identifier
+	  instanceId: this.identifier,
+	  vin: this.config.vin	
     });
 
     var self = this;
@@ -46,7 +47,7 @@ Module.register("MMM-BMWConnected", {
       notification === "MMM-BMWCONNECTED-RESPONSE" + this.identifier &&
       Object.keys(payload).length > 0
     ) {
-      this.bmwInfo = payload;
+      this.bmwInfo = payload[this.config.vin];
       this.updateDom(1000);
     }
   },
@@ -78,13 +79,17 @@ Module.register("MMM-BMWConnected", {
       return wrapper;
     }
 
+    if (!!this.bmwInfo.error) {
+	  wrapper.innerHTML = this.bmwInfo.error;
+      wrapper.className = "dimmed light small";
+      return wrapper;
+    }
+
     let info = this.bmwInfo;
 
     var carContainer = document.createElement("div");
     carContainer.classList.add("bmw-container");
 
-    carContainer = document.createElement("div");
-    carContainer.classList.add("bmw-container");
     var imageContainer = document.createElement("span");
     var imageObject = document.createElement("img");
     imageObject.setAttribute('src', info.imageUrl);
@@ -108,13 +113,13 @@ Module.register("MMM-BMWConnected", {
     mileage.classList.add("mileage");
     if (this.config.showMileage) {
       mileage.appendChild(this.faIconFactory("fa-road"));
-      if(distanceSuffix != info.mileage) {
+/*      if(distanceSuffix != info.mileage) {
         if(distanceSuffix == 'km') {
           info.mileage = Math.floor(info.mileage * 1.60934);
         } else {
           info.mileage = Math.floor(info.mileage * 0.621371);
-        }  
-      }  
+        } 
+      }  */
       mileage.appendChild(document.createTextNode(info.mileage + " " + distanceSuffix));
     } else {
       mileage.appendChild(document.createTextNode("\u00a0"));
@@ -127,7 +132,7 @@ Module.register("MMM-BMWConnected", {
 
     var plugged = document.createElement("span");
     plugged.classList.add("plugged");
-    if (info.connectorStatus == "CONNECTED") {
+    if (info.connectorStatus) {
       plugged.appendChild(this.faIconFactory("fa-bolt"));
     } else {
       plugged.appendChild(this.faIconFactory("fa-plug"));

@@ -1,9 +1,11 @@
 # MMM-BMWConnected
-Magic Mirror Module to display data from BMW Connected drive for your car.
+Magic Mirror Module to display data from BMW Connected drive for your car(s).
 
 ![Screenshot](screenshot.png "Screenshot")
 
-The module displays icons to show lock, charging and battery status, electric and combined range, and total miles driven. It also shows the time the Connected Drive API last received data from the car.
+The module displays icons to show lock, charging and battery status, electric and combined range, and total kilometers driven. It also shows the time the Connected Drive API last received data from the car.
+
+If you own several BMW cars, you can configure a module for each of them. The module configuration requires the vin number of the car to separate multiple module instances.
 
 ## Installation
 
@@ -19,7 +21,7 @@ Clone this repository in your modules folder, and install dependencies:
 
 Go to the MagicMirror/config directory and edit the config.js file. Add the module to your modules array in your config.js.
 
-You'll need your BMW Connected Drive email and password.
+You'll need your BMW Connected Drive email and password, and your car's vin number.
 
 Enter these details in the config.js for your MagicMirror installation:
 
@@ -29,7 +31,8 @@ Enter these details in the config.js for your MagicMirror installation:
             position: "top_right",
             config: {
                 email: "email@example.com",
-                password: "myComplexPassword"
+                password: "myComplexPassword",
+				vin: "XXXXXXXXXXXXXXXXX"
             }
         },
 
@@ -46,11 +49,15 @@ The module has a few configuration options:
   <tbody>
     <tr>
       <td><code>email</code></td>
-      <td>Your username or email for the BMW Connected Drive platform.<br /><br /><strong>Default: </strong><code>undefined</code></td>
+      <td>Your username or email for the BMW Connected Drive platform, required.<br /><br /><strong>Default: </strong><code>undefined</code></td>
     </tr>
     <tr>
       <td><code>password</code></td>
-      <td>Your password for the BMW Connected Drive platform.<br /><br /><strong>Default: </strong><code>undefined</code></td>
+      <td>Your password for the BMW Connected Drive platform, required.<br /><br /><strong>Default: </strong><code>undefined</code></td>
+    </tr>
+    <tr>
+      <td><code>vin</code></td>
+      <td>Your car's vin code, required.<br /><br /><strong>Default: </strong><code>undefined</code></td>
     </tr>
     <tr>
       <td><code>apiBase</code></td>
@@ -59,10 +66,6 @@ The module has a few configuration options:
     <tr>
       <td><code>refresh</code></td>
       <td>How often to refresh the data in minutes. <br /><br /><strong>Default: </strong><code>15</code> </td>
-    </tr>
-    <tr>
-      <td><code>vehicleAngle</code></td>
-      <td>The angle of rotation for the car image. <br /><br /><strong>Default: </strong><code>300</code><br/>Between 0 and 350 in increments of 10.</td>
     </tr>
     <tr>
       <td><code>vehicleOpacity</code></td>
@@ -86,7 +89,7 @@ The module has a few configuration options:
     </tr>
     <tr>
       <td><code>showFuelRange</code></td>
-      <td>Whether to show the fuel range. <br /><br /><strong>Default: </strong><code>true</code>
+      <td>Whether to show the fuel range. Note that BMW API returns the electric range as fuel range for fully electric cars.<br /><br /><strong>Default: </strong><code>true</code>
     </tr>
     <tr>
       <td><code>lastUpdatedText</code></td>
@@ -104,6 +107,8 @@ Hat tip to [Nils Schneider](https://github.com/Lyve1981/BMW-ConnectedDrive-JSON-
 Thanks to [Eugen](https://github.com/yfre/MMM-BMWConnected) for fixing the connectivity issues.
 
 ## Changelog
+
+**2022-12-13** Fixed BMW connectivity and added support for several module instances, separated by vin codes. Currently tested only with European region. The car image is downloaded from the API and stored into a local file. The angle of the car cannot be selected anymore due to BMW API changes.
 
 **2022-06-13** Fixed mileage into kilometers, moved the car image to background, and added information about `vehicleOpacity` config option. Changed the example image.
 
