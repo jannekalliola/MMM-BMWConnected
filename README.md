@@ -1,6 +1,8 @@
 # MMM-BMWConnected
 Magic Mirror Module to display data from BMW Connected drive for your car(s).
 
+**Unfortunately, the module connection to BMW back-end is broken and thus it is not functional. I have currently no time to debug the issue, as it seems to be rather big.**
+
 ![Screenshot](screenshot.png "Screenshot")
 
 The module displays icons to show lock, charging and battery status, electric and combined range, and total kilometers driven. It also shows the time the Connected Drive API last received data from the car.
