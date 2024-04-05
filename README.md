@@ -1,7 +1,7 @@
 # MMM-BMWConnected
 Magic Mirror Module to display data from BMW Connected drive for your car(s).
 
-**The module has been deprecated due to changes in BMW back-end. Please use this module instead: https://github.com/Jargendas/MMM-MyBMW **
+**The module has been deprecated due to changes in BMW back-end. Please use [this module](https://github.com/Jargendas/MMM-MyBMW) instead**
 
 ![Screenshot](screenshot.png "Screenshot")
 
